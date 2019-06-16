@@ -8,7 +8,7 @@ import logging.handlers
 import config as cfg
 
 
-class Logger(object):
+class logger(object):
 	LEVEL = cfg.LOG_LEVEL
 	log_path = cfg.LOG_PATH
 

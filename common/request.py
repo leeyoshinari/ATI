@@ -6,7 +6,7 @@ import json
 import traceback
 import requests
 import config as cfg
-from common.logger.Logger import logger
+from common.logger import logger
 
 
 class Request(object):
@@ -16,17 +16,17 @@ class Request(object):
 
 	def get(self, protocol, interface, timeout):
 		url = '{}://{}:{}{}'.format(protocol, self.ip, self.port, interface)
-		logger.debug(url)
+		logger.logger.debug(url)
 		res = requests.get(url=url, timeout=timeout)
-		logger.debug(json.loads(res.content.decode()))
+		logger.logger.debug(json.loads(res.content.decode()))
 		return res
 
 	def post(self, protocol, interface, data, headers, timeout):
 		url = '{}://{}:{}{}'.format(protocol, self.ip, self.port, interface)
-		logger.debug(url)
-		logger.debug(data)
+		logger.logger.debug(url)
+		logger.logger.debug(data)
 		res = requests.post(url=url, data=json.dumps(data), headers=headers, timeout=timeout)
-		logger.debug(json.loads(res.content.decode()))
+		logger.logger.debug(json.loads(res.content.decode()))
 		return res
 
 	def request(self, method, protocol, interface, data=None, headers=None, timeout=None):
@@ -42,11 +42,11 @@ class Request(object):
 			elif method == 'post':
 				res = self.post(protocol, interface, data, headers, timeout)
 			else:
-				logger.error('暂不支持其他请求方式')
+				logger.logger.error('暂不支持其他请求方式')
 				raise Exception('暂不支持其他请求方式')
 
 			return res
 
 		except Exception as err:
-			logger.error(err)
+			logger.logger.error(err)
 			raise Exception(traceback.format_exc())

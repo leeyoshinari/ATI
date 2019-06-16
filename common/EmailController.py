@@ -8,7 +8,7 @@ from email.mime.multipart import MIMEMultipart
 from email.header import Header
 
 from common.Encrypt import emailServer
-from common.logger.Logger import logger
+from common.logger import logger
 
 
 def sendMsg(msg):
@@ -31,7 +31,7 @@ def sendMsg(msg):
 		server = emailServer(msg['smtp_server'], 465, msg['sender'], msg['password'])
 		server.sendmail(msg['sender'], msg['receiver'], message.as_string())
 		server.quit()
-		logger.info('邮件发送成功')
+		logger.logger.info('邮件发送成功')
 	except Exception as err:
-		logger.error(traceback.format_exc())
+		logger.logger.error(traceback.format_exc())
 		sendMsg(msg)

@@ -6,7 +6,7 @@ import os
 import time
 import config as cfg
 from common.Testing import Testing
-from common.logger.Logger import logger
+from common.logger import logger
 
 
 def getPID(port):
@@ -16,7 +16,7 @@ def getPID(port):
 		res = result.strip().split(' ')
 		pid = int(res[1])
 	except Exception as err:
-		logger.error(err)
+		logger.logger.error(err)
 
 	return pid
 
@@ -42,4 +42,6 @@ def main():
 
 
 if __name__ == '__main__':
-	main()
+	# main()
+	test = Testing()
+	test.run()

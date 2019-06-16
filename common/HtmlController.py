@@ -5,22 +5,24 @@
 import os
 import time
 import config as cfg
-from common.logger.Logger import logger
+from common.logger import logger
 
 
 class HtmlController(object):
 	def __init__(self):
 		self.path = cfg.RESULT_PATH
 		self.start_time = time.time()
-		date_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+		date_time = time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(self.start_time))
+		test_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.start_time))
+		today = date_time.split('_')[0]
 		self.html = cfg.HTML
 		self.name = '{}_{}'.format(cfg.HEADER, date_time)
-		self.title = cfg.TITLE.format(self.name)
-		self.test_time = cfg.TEST_TIME.format(date_time)
+		self.title = cfg.TITLE.format('{}_{}'.format(cfg.HEADER, today))
+		self.test_time = cfg.TEST_TIME.format(test_time)
 		self.overview = cfg.H3.format('概览')
 		self.overview1 = cfg.OVERVIEW1 + cfg.OVERVIEW2
 		self.fail = cfg.H3.format('失败用例详情')
-		self.success = cfg.format('测试结果详情')
+		self.success = cfg.H3.format('测试结果详情')
 		self.table = cfg.TABLE
 		self.table_head = cfg.TABLE_HEAD
 		self.tr = cfg.TR
@@ -77,7 +79,7 @@ class HtmlController(object):
 	def writeHtml(self):
 		fail_case_num = len(self._fail_case)
 		all_case_num = len(self._all_case)
-		success_rate = fail_case_num / all_case_num * 100
+		success_rate = (1 - fail_case_num / all_case_num) * 100
 		spend_time = time.time() - self.start_time
 
 		fail_rows = ''.join(self._fail_case)
@@ -96,7 +98,7 @@ class HtmlController(object):
 		with open(html_path, 'w') as f:
 			f.writelines(all_html)
 
-		logger.info('所有用例测试结果保存成功。')
+		logger.logger.info('所有用例测试结果保存成功。')
 		return fail_html, self.name
 
 	def __del__(self):

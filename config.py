@@ -11,15 +11,15 @@ SLEEP = 60
 
 # ip地址和端口
 IP = '127.0.0.1'
-PORT = '80'
+PORT = '5555'
 HEADERS = {}
 
 # 测试用例路径
-TESTCASE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'testCase', 'testCase.xlsx')
+TESTCASE_PATH = os.path.join(os.path.dirname(__file__), 'testCase', 'testCase.xlsx')
 # 测试结果存放路径
-RESULT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'result')
+RESULT_PATH = os.path.join(os.path.dirname(__file__), 'result')
 # 日志路径
-LOG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'result')
+LOG_PATH = os.path.join(os.path.dirname(__file__), 'result')
 
 # 是否将测试结果保存到excel
 IS_TO_EXCEL = True
@@ -48,10 +48,10 @@ HTML = '<html><body>{}</body></html>'
 TITLE = '<h2 align="center">{}</h2>'
 TEST_TIME = '<p align="right">测试时间：{}</p>'
 H3 = '<h3>{}</h3>'
-OVERVIEW1 = '<p>&nbsp;&nbsp;&nbsp;&nbsp;执行用例总数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;执行用例总耗时：<font color="blue">{}</font> s</p>'
+OVERVIEW1 = '<p>&nbsp;&nbsp;&nbsp;&nbsp;执行用例总数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;执行用例总耗时：<font color="blue">{:.2f}</font> s</p>'
 OVERVIEW2 = '<p>&nbsp;&nbsp;&nbsp;&nbsp;执行成功用例数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;执行失败用例数：<font color="red">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;成功率：<font color="red">{}%</font></p>'
-TABILE = '<table width="100%" border="1" cellspacing="0" cellpadding="6" align="center">{}</table>'
-TABLE_HEAD = '<tr bgcolor="#99CCFF" align="center"><th>用例ID</th><th>请求接口</th><th>请求方式</th><th>请求参数</th><th>响应值</th><th>响应时间</th><th>测试结果</th><th>失败原因</th></tr>'
+TABLE = '<table width="100%" border="1" cellspacing="0" cellpadding="6" align="center">{}</table>'
+TABLE_HEAD = '<tr bgcolor="#99CCFF" align="center"><th width="7%">用例ID</th><th width="12%">请求接口</th><th width="7%">请求方式</th><th width="20%">请求参数</th><th width="20%">响应值</th><th width="7%">响应时间</th><th width="7%">测试结果</th><th width="20%">失败原因</th></tr>'
 TR = '<tr bgcolor="#{}">{}</tr>'
 TD = '<td>{}</td>'
 TD_FAIL = '<td><font color="red">Fail</font></td>'

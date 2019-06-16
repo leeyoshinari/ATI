@@ -4,7 +4,7 @@
 
 import xlrd
 import config as cfg
-from common.logger.Logger import logger
+from common.logger import logger
 
 
 class ExcelController(object):
@@ -18,10 +18,10 @@ class ExcelController(object):
 			table = excel.sheet_by_name(sheet)
 			for i in range(1, table.nrows):
 				if table.cell_value(i, 0):
-					caseId = table.cell_value(i, 0)
+					caseId = '{}_{}'.format(sheet, table.cell_value(i, 0))
 
 					if not int(table.cell_value(i, 1)):
-						logger.info('用例Id {} 不执行，已跳过'.format(caseId))
+						logger.logger.info('用例Id {} 不执行，已跳过'.format(caseId))
 						continue
 
 					# priority = int(table.cell_value(i, 2))

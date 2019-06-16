@@ -9,7 +9,7 @@ from common.request import Request
 from common.HtmlController import HtmlController
 from common.ExcelController import ExcelController
 from common.EmailController import sendMsg
-from common.logger.Logger import logger
+from common.logger import logger
 
 
 class Testing(object):
@@ -77,4 +77,4 @@ class Testing(object):
 			del self.request
 
 		except Exception as err:
-			logger.error(traceback.format_exc())
+			logger.logger.error(traceback.format_exc())
