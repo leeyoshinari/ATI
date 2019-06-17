@@ -13,7 +13,10 @@ from common.logger import logger
 
 def sendMsg(msg):
 	message = MIMEMultipart()
-	message['From'] = Header(msg['sender'], 'utf-8')
+	if msg['smtp_server'] == 'smtp.sina.com':
+		message['From'] = Header(msg['sender'])
+	else:
+		message['From'] = Header(msg['sender'], 'utf-8')
 	message['To'] = Header(msg['receiver'], 'utf-8')
 	message['Subject'] = Header(msg['subject'], 'utf-8')
 
@@ -22,7 +25,7 @@ def sendMsg(msg):
 
 	all_test = MIMEText(open(msg['all_test'], 'rb').read(), 'base64', 'utf-8')
 	all_test['Content-Type'] = 'application/octet-stream'
-	all_test['Content-Disposition'] = 'attachment; filename-"{}.html"'.format(msg['subject'])
+	all_test['Content-Disposition'] = 'attachment; filename="All Cases Result.html"'
 	message.attach(all_test)
 
 	try:

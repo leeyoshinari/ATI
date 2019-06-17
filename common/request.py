@@ -3,7 +3,6 @@
 # Author: leeyoshinari
 
 import json
-import traceback
 import requests
 import config as cfg
 from common.logger import logger
@@ -49,4 +48,4 @@ class Request(object):
 
 		except Exception as err:
 			logger.logger.error(err)
-			raise Exception(traceback.format_exc())
+			raise Exception(err)

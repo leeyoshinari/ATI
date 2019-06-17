@@ -3,6 +3,7 @@
 # Author: leeyoshinari
 
 import os
+import json
 import traceback
 import config as cfg
 from common.request import Request
@@ -23,22 +24,29 @@ class Testing(object):
 		self.excel = ExcelController()
 
 	def run(self):
+		logger.logger.info('开始测试')
 		try:
 			for ele in self.excel.readExcel():
-				response = None
+				response = ''
 				responseTime = 0
 				result = 'Fail'
-				reason = None
+				reason = ''
+				flag = 0
 				try:
 					res = self.request.request(method=ele['method'], protocol=ele['protocol'],
 					                           interface=ele['interface'], data=ele['data'])
-					response = res.content.decode()
+					response = json.loads(res.content.decode())
 					responseTime = int(res.elapsed.microseconds / 1000)
 
-					if ele['assertion'] in response:
-						result = 'Success'
-					else:
-						reason = ''
+					for k, v in response.items():
+						if ele['assertion'] == v:
+							result = 'Success'
+							flag = 1
+							break
+
+					if flag == 0:
+						reason = '断言失败'
+
 				except Exception as err:
 					reason = err
 
@@ -75,6 +83,8 @@ class Testing(object):
 			del self.html
 			del self.excel
 			del self.request
+
+			logger.logger.info('测试完成')
 
 		except Exception as err:
 			logger.logger.error(traceback.format_exc())

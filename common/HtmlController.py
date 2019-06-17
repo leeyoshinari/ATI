@@ -66,7 +66,7 @@ class HtmlController(object):
 		method = self.td.format(value['method'])
 		param = self.td.format(value['param'])
 		response = self.td.format(value['response'])
-		responseTime = self.td.format(value['responseTime'])
+		responseTime = self.td.format(str(value['responseTime']) + ' ms')
 		if value['result'] == 'Fail':
 			result = self.td_fail.format(value['result'])
 		else:

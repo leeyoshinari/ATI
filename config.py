@@ -5,8 +5,10 @@
 import os
 
 # 日志级别
-LOG_LEVEL = 'DEBUG'
-TIMEOUT = 1
+LOG_LEVEL = 'INFO'
+# 超时时间
+TIMEOUT = 0.5
+# 检查端口是否存在间隔时间
 SLEEP = 60
 
 # ip地址和端口
@@ -30,21 +32,22 @@ IS_TO_FDFS = True
 
 # 测试完成后是否自动发送邮件
 IS_EMAIL = True
-# 邮箱配置
-SMTP_SERVER = 'smtp.qq.com'
+# 邮箱配置，qq邮箱为smtp.qq.com
+# 所用的发件邮箱必须开启SMTP服务
+SMTP_SERVER = 'smtp.sina.com'
 # 发件人
-SENDER = '123456789@qq.com'
+SENDER = '123456@sina.com'
 # 邮箱登陆密码
 PASSWORD = '123456'
 # 收件人
-RECEIVER = ['123456@qq.com', '234567@qq.com']
+RECEIVER = '123456@sina.com, 123456@qq.com'
 
 
 # 每行表格背景颜色
 BG_COLOR = ['FFFFFF', 'E8E8E8']
 # 表格模板
 HEADER = '接口自动化测试报告'
-HTML = '<html><body>{}</body></html>'
+HTML = '<html><meta charset="gbk"><body>{}</body></html>'
 TITLE = '<h2 align="center">{}</h2>'
 TEST_TIME = '<p align="right">测试时间：{}</p>'
 H3 = '<h3>{}</h3>'

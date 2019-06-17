@@ -18,7 +18,7 @@ class ExcelController(object):
 			table = excel.sheet_by_name(sheet)
 			for i in range(1, table.nrows):
 				if table.cell_value(i, 0):
-					caseId = '{}_{}'.format(sheet, table.cell_value(i, 0))
+					caseId = table.cell_value(i, 0)
 
 					if not int(table.cell_value(i, 1)):
 						logger.logger.info('用例Id {} 不执行，已跳过'.format(caseId))
