@@ -13,7 +13,10 @@ class Request(object):
 		self.ip = cfg.IP
 		self.port = cfg.PORT
 
-	def get(self, protocol, interface, timeout):
+	def get(self, protocol, interface, data, timeout):
+		if data:
+			request_data = data.split(',')
+			interface = interface.format(*request_data)
 		url = '{}://{}:{}{}'.format(protocol, self.ip, self.port, interface)
 		logger.logger.debug(url)
 		res = requests.get(url=url, timeout=timeout)
@@ -28,7 +31,7 @@ class Request(object):
 		logger.logger.debug(json.loads(res.content.decode()))
 		return res
 
-	def request(self, method, protocol, interface, data=None, headers=None, timeout=None):
+	def request(self, method, protocol, interface, data, headers=None, timeout=None):
 		if timeout is None:
 			timeout = cfg.TIMEOUT
 
@@ -37,7 +40,7 @@ class Request(object):
 
 		try:
 			if method == 'get':
-				res = self.get(protocol, interface, timeout)
+				res = self.get(protocol, interface, data, timeout)
 			elif method == 'post':
 				res = self.post(protocol, interface, data, headers, timeout)
 			else:
@@ -49,3 +52,6 @@ class Request(object):
 		except Exception as err:
 			logger.logger.error(err)
 			raise Exception(err)
+
+	def __del__(self):
+		pass

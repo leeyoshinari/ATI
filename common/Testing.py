@@ -54,7 +54,7 @@ class Testing(object):
 				               'interface': ele['interface'],
 				               'method': ele['method'],
 				               'param': ele['data'],
-				               'response': response,
+				               'response': response if result == 'Fail' else '',
 				               'responseTime': responseTime,
 				               'result': result,
 				               'reason': reason}
@@ -71,11 +71,13 @@ class Testing(object):
 				fail_html, html_name = self.html.writeHtml()
 
 			if self.is_email:
+				with open('Mail_Group_Address.txt', 'r') as f:
+					receiver = f.readline().strip()
 				msg = {'subject': html_name,
 				       'smtp_server': cfg.SMTP_SERVER,
 				       'sender': cfg.SENDER,
 				       'password': cfg.PASSWORD,
-				       'receiver': cfg.RECEIVER,
+				       'receiver': receiver,
 				       'fail_test': fail_html,
 				       'all_test': os.path.join(cfg.RESULT_PATH, html_name + '.html')}
 				sendMsg(msg)
@@ -88,3 +90,6 @@ class Testing(object):
 
 		except Exception as err:
 			logger.logger.error(traceback.format_exc())
+
+	def __del__(self):
+		pass

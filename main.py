@@ -34,6 +34,7 @@ def main():
 				PID = pid
 				test = Testing()
 				test.run()
+				time.sleep(3)
 				del test
 			else:
 				time.sleep(sleep)
@@ -42,6 +43,4 @@ def main():
 
 
 if __name__ == '__main__':
-	# main()
-	test = Testing()
-	test.run()
+	main()

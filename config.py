@@ -9,7 +9,7 @@ LOG_LEVEL = 'INFO'
 # 超时时间
 TIMEOUT = 0.5
 # 检查端口是否存在间隔时间
-SLEEP = 60
+SLEEP = 30
 
 # ip地址和端口
 IP = '127.0.0.1'
@@ -39,8 +39,9 @@ SMTP_SERVER = 'smtp.sina.com'
 SENDER = '123456@sina.com'
 # 邮箱登陆密码
 PASSWORD = '123456'
-# 收件人
-RECEIVER = '123456@sina.com, 123456@qq.com'
+# 收件人，详见 Mail_Group_Address.txt 文件。
+# 为什么这样，因为可以修改邮件组成员而不用重启程序
+# RECEIVER = '123456@sina.com, 123456@qq.com'
 
 
 # 每行表格背景颜色

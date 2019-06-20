@@ -12,6 +12,7 @@ from common.logger import logger
 
 
 def sendMsg(msg):
+	logger.logger.info(msg)
 	message = MIMEMultipart()
 	if msg['smtp_server'] == 'smtp.sina.com':
 		message['From'] = Header(msg['sender'])
