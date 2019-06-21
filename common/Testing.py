@@ -33,8 +33,7 @@ class Testing(object):
 				reason = ''
 				flag = 0
 				try:
-					res = self.request.request(method=ele['method'], protocol=ele['protocol'],
-					                           interface=ele['interface'], data=ele['data'])
+					res = self.request.request(method=ele['method'], protocol=ele['protocol'], interface=ele['interface'], data=ele['data'])
 					response = json.loads(res.content.decode())
 					responseTime = int(res.elapsed.microseconds / 1000)
 
@@ -45,7 +44,7 @@ class Testing(object):
 							break
 
 					if flag == 0:
-						reason = '断言失败'
+						reason = 'Assertion failure message:text expected to contain {}'.format(ele['assertion'])
 
 				except Exception as err:
 					reason = err

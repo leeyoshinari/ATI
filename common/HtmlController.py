@@ -21,7 +21,8 @@ class HtmlController(object):
 		self.test_time = cfg.TEST_TIME.format(test_time)
 		self.overview = cfg.H3.format('概览')
 		self.overview1 = cfg.OVERVIEW1 + cfg.OVERVIEW2
-		self.fail = cfg.H3.format('失败用例详情')
+		self.fail1 = cfg.H3.format('失败用例详情' + cfg.SPAN)
+		self.fail2 = cfg.H3.format(cfg.SPAN)
 		self.success = cfg.H3.format('测试结果详情')
 		self.table = cfg.TABLE
 		self.table_head = cfg.TABLE_HEAD
@@ -47,11 +48,10 @@ class HtmlController(object):
 		method = self.td.format(value['method'])
 		param = self.td.format(value['param'])
 		response = self.td.format(value['response'])
-		responseTime = self.td.format(value['responseTime'])
+		responseTime = self.td.format(str(value['responseTime']) + ' ms')
 		result = self.td_fail.format(value['result'])
 		reason = self.td.format(value['reason'])
-		res = self.tr.format(self.bg_color[color], '{}{}{}{}{}{}{}{}'.format(caseId, interface, method, param, response,
-		                                                                     responseTime, result, reason))
+		res = self.tr.format(self.bg_color[color], '{}{}{}{}{}{}{}{}'.format(caseId, interface, method, param, response, responseTime, result, reason))
 		self._fail_case.append(res)
 
 	@property
@@ -72,8 +72,7 @@ class HtmlController(object):
 		else:
 			result = self.td_success.format(value['result'])
 		reason = self.td.format(value['reason'])
-		res = self.tr.format(self.bg_color[color], '{}{}{}{}{}{}{}{}'.format(caseId, interface, method, param, response,
-		                                                                     responseTime, result, reason))
+		res = self.tr.format(self.bg_color[color], '{}{}{}{}{}{}{}{}'.format(caseId, interface, method, param, response, responseTime, result, reason))
 		self._all_case.append(res)
 
 	def writeHtml(self):
@@ -91,7 +90,10 @@ class HtmlController(object):
 		detail = self.overview1.format(all_case_num, spend_time, all_case_num-fail_case_num, fail_case_num, success_rate)
 		header = '{}{}{}{}'.format(self.title, self.test_time, self.overview, detail)
 
-		fail_html = self.html.format('{}{}{}{}'.format(header, self.fail, fail_table, self.last))
+		if success_rate == 100:
+			fail_html = self.html.format('{}{}{}'.format(header, self.fail2, self.last))
+		else:
+			fail_html = self.html.format('{}{}{}{}'.format(header, self.fail1, fail_table, self.last))
 		all_html = self.html.format('{}{}{}'.format(header, self.success, all_table))
 
 		html_path = os.path.join(self.path, self.name + '.html')

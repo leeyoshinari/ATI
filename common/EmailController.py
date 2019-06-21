@@ -33,7 +33,7 @@ def sendMsg(msg):
 		# server = smtplib.SMTP_SSL(msg['smtp_server'], 465)
 		# server.login(msg['sender'], msg['password'])
 		server = emailServer(msg['smtp_server'], 465, msg['sender'], msg['password'])
-		server.sendmail(msg['sender'], msg['receiver'], message.as_string())
+		server.sendmail(msg['sender'], msg['receiver'].split(','), message.as_string())
 		server.quit()
 		logger.logger.info('邮件发送成功')
 	except Exception as err:

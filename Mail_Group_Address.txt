@@ -1,1 +1,1 @@
-23456@sina.com, 123456@qq.com
+23456@sina.com,123456@qq.com
