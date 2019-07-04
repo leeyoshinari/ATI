@@ -15,10 +15,10 @@ def sendMsg(msg):
 	logger.logger.info(msg)
 	message = MIMEMultipart()
 	if msg['smtp_server'] == 'smtp.sina.com':
-		message['From'] = Header(msg['sender'])
+		message['From'] = Header(msg['sender_name'])
 	else:
-		message['From'] = Header(msg['sender'], 'utf-8')
-	message['To'] = Header(msg['receiver'], 'utf-8')
+		message['From'] = Header(msg['sender_name'], 'utf-8')
+	message['To'] = Header(msg['receiver_name'], 'utf-8')
 	message['Subject'] = Header(msg['subject'], 'utf-8')
 
 	email_text = MIMEText(msg['fail_test'], 'html', 'utf-8')
@@ -32,8 +32,8 @@ def sendMsg(msg):
 	try:
 		# server = smtplib.SMTP_SSL(msg['smtp_server'], 465)
 		# server.login(msg['sender'], msg['password'])
-		server = emailServer(msg['smtp_server'], 465, msg['sender'], msg['password'])
-		server.sendmail(msg['sender'], msg['receiver'].split(','), message.as_string())
+		server = emailServer(msg['smtp_server'], 465, msg['sender_email'], msg['password'])
+		server.sendmail(msg['sender_email'], msg['receiver_email'].split(','), message.as_string())
 		server.quit()
 		logger.logger.info('邮件发送成功')
 	except Exception as err:

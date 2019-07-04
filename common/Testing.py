@@ -10,6 +10,7 @@ from common.request import Request
 from common.HtmlController import HtmlController
 from common.ExcelController import ExcelController
 from common.EmailController import sendMsg
+from common.compare import compare
 from common.logger import logger
 
 
@@ -37,14 +38,28 @@ class Testing(object):
 					response = json.loads(res.content.decode())
 					responseTime = int(res.elapsed.microseconds / 1000)
 
-					for k, v in response.items():
-						if ele['assertion'] == v:
-							result = 'Success'
-							flag = 1
-							break
+					if ele['assertion']:
+						for k, v in response.items():
+							if ele['assertion'] == v:
+								result = 'Success'
+								reason = ''
+								flag = 1
+								break
 
-					if flag == 0:
-						reason = 'Assertion failure message:text expected to contain {}'.format(ele['assertion'])
+						if flag == 0:
+							reason = 'Assertion failure message:text expected to contain {}'.format(ele['assertion'])
+
+					elif ele['expectedResult']:
+						flag, reason = compare.compare(json.loads(ele['expectedResult']), response)
+						if flag == 0:
+							result = 'Fail'
+						elif flag == 1:
+							result = 'Success'
+							reason = ''
+
+					else:
+						result = 'Unknown'
+						reason = 'Warning: Not verify the result'
 
 				except Exception as err:
 					reason = err
@@ -53,15 +68,13 @@ class Testing(object):
 				               'interface': ele['interface'],
 				               'method': ele['method'],
 				               'param': ele['data'],
-				               'response': response if result == 'Fail' else '',
+				               'response': response if result != 'Success' else '',
 				               'responseTime': responseTime,
 				               'result': result,
 				               'reason': reason}
 
 				if self.is_to_html:
 					self.html.all_case = case_result
-					if result == 'Fail':
-						self.html.fail_case = case_result
 
 				if self.is_to_excel:
 					self.excel.writeExcel()
@@ -70,13 +83,16 @@ class Testing(object):
 				fail_html, html_name = self.html.writeHtml()
 
 			if self.is_email:
-				with open('Mail_Group_Address.txt', 'r') as f:
+				mail_group = '{}.txt'.format(cfg.RECEIVER_NAME)
+				with open(mail_group, 'r') as f:
 					receiver = f.readline().strip()
 				msg = {'subject': html_name,
 				       'smtp_server': cfg.SMTP_SERVER,
-				       'sender': cfg.SENDER,
+				       'sender_name': cfg.SENDER_NAME,
+				       'sender_email': cfg.SENDER_EMAIL,
 				       'password': cfg.PASSWORD,
-				       'receiver': receiver,
+				       'receive_name': cfg.RECEIVER_NAME,
+				       'receiver_email': receiver,
 				       'fail_test': fail_html,
 				       'all_test': os.path.join(cfg.RESULT_PATH, html_name + '.html')}
 				sendMsg(msg)

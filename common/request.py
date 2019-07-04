@@ -27,7 +27,7 @@ class Request(object):
 		url = '{}://{}:{}{}'.format(protocol, self.ip, self.port, interface)
 		logger.logger.debug(url)
 		logger.logger.debug(data)
-		res = requests.post(url=url, data=json.dumps(data), headers=headers, timeout=timeout)
+		res = requests.post(url=url, data=data, headers=headers, timeout=timeout)
 		logger.logger.debug(json.loads(res.content.decode()))
 		return res
 

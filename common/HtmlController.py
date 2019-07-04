@@ -37,24 +37,6 @@ class HtmlController(object):
 		self._all_case = []
 
 	@property
-	def fail_case(self):
-		return self._fail_case
-
-	@fail_case.setter
-	def fail_case(self, value):
-		color = int(value['caseId'].split('_')[-1]) % 2
-		caseId = self.td.format(value['caseId'])
-		interface = self.td.format(value['interface'])
-		method = self.td.format(value['method'])
-		param = self.td.format(value['param'])
-		response = self.td.format(value['response'])
-		responseTime = self.td.format(str(value['responseTime']) + ' ms')
-		result = self.td_fail.format(value['result'])
-		reason = self.td.format(value['reason'])
-		res = self.tr.format(self.bg_color[color], '{}{}{}{}{}{}{}{}'.format(caseId, interface, method, param, response, responseTime, result, reason))
-		self._fail_case.append(res)
-
-	@property
 	def all_case(self):
 		return self._all_case
 
@@ -73,6 +55,10 @@ class HtmlController(object):
 			result = self.td_success.format(value['result'])
 		reason = self.td.format(value['reason'])
 		res = self.tr.format(self.bg_color[color], '{}{}{}{}{}{}{}{}'.format(caseId, interface, method, param, response, responseTime, result, reason))
+
+		if value['result'] == 'Fail':
+			self._fail_case.append(res)
+
 		self._all_case.append(res)
 
 	def writeHtml(self):

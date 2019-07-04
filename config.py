@@ -36,12 +36,13 @@ IS_EMAIL = True
 # 所用的发件邮箱必须开启SMTP服务
 SMTP_SERVER = 'smtp.sina.com'
 # 发件人
-SENDER = '123456@sina.com'
-# 邮箱登陆密码
+SENDER_NAME = '张三'
+SENDER_EMAIL = 'zhangsan@qq.com'
+# 邮箱登陆密码，经过base64编码
 PASSWORD = '123456'
-# 收件人，详见 Mail_Group_Address.txt 文件。
+# 收件人，对应 baidu_all.txt 文件，该文件为邮件组。
 # 为什么这样，因为可以修改邮件组成员而不用重启程序
-# RECEIVER = '123456@sina.com, 123456@qq.com'
+RECEIVER_NAME = 'baidu_all'
 
 
 # 每行表格背景颜色
