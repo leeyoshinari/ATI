@@ -35,39 +35,44 @@ class Testing(object):
 				flag = 0
 				try:
 					res = self.request.request(method=ele['method'], protocol=ele['protocol'], interface=ele['interface'], data=ele['data'])
-					response = json.loads(res.content.decode())
-					responseTime = int(res.elapsed.microseconds / 1000)
+					if res.status_code == 200:
+						response = json.loads(res.content.decode())
+						responseTime = int(res.elapsed.microseconds / 1000)
 
-					if ele['assertion']:
-						for k, v in response.items():
-							if ele['assertion'] == v:
+						if ele['assertion']:
+							if ele['assertion'] in str(response):
 								result = 'Success'
 								reason = ''
 								flag = 1
-								break
 
-						if flag == 0:
-							reason = 'Assertion failure message:text expected to contain {}'.format(ele['assertion'])
+							if flag == 0:
+								reason = 'Assertion failure message:text expected to contain {}'.format(ele['assertion'])
 
-					elif ele['expectedResult']:
-						flag, reason = compare.compare(json.loads(ele['expectedResult']), response)
-						if flag == 0:
-							result = 'Fail'
-						elif flag == 1:
-							result = 'Success'
-							reason = ''
+						elif ele['expectedResult']:
+							flag, reason = compare().compare(json.loads(ele['expectedResult']), response)
+							if flag == 0:
+								result = 'Fail'
+							elif flag == 1:
+								result = 'Success'
+								reason = ''
+
+						else:
+							result = 'Unknown'
+							reason = 'Warning: Not verify the result'
 
 					else:
-						result = 'Unknown'
-						reason = 'Warning: Not verify the result'
+						logger.logger.error(f'Response status code is {res.status_code}')
+						reason = f'Response status code is {res.status_code}'
+						result = 'Fail'
 
 				except Exception as err:
 					reason = err
+					logger.logger.error(traceback.format_exc())
 
 				case_result = {'caseId': ele['caseId'],
 				               'interface': ele['interface'],
 				               'method': ele['method'],
-				               'param': ele['data'],
+				               'param': ele['data'] if ele['method'] == 'post' else '',
 				               'response': response if result != 'Success' else '',
 				               'responseTime': responseTime,
 				               'result': result,
@@ -91,7 +96,7 @@ class Testing(object):
 				       'sender_name': cfg.SENDER_NAME,
 				       'sender_email': cfg.SENDER_EMAIL,
 				       'password': cfg.PASSWORD,
-				       'receive_name': cfg.RECEIVER_NAME,
+				       'receiver_name': cfg.RECEIVER_NAME,
 				       'receiver_email': receiver,
 				       'fail_test': fail_html,
 				       'all_test': os.path.join(cfg.RESULT_PATH, html_name + '.html')}

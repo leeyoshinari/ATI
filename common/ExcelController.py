@@ -2,14 +2,17 @@
 # -*- coding:utf-8 -*-
 # Author: leeyoshinari
 
+import re
 import xlrd
 import config as cfg
+from common.TxtToDict import txt_dict
 from common.logger import logger
 
 
 class ExcelController(object):
 	def __init__(self):
 		self.path = cfg.TESTCASE_PATH
+		self.global_variables = txt_dict()
 
 	def readExcel(self):
 		excel = xlrd.open_workbook(self.path)
@@ -29,9 +32,13 @@ class ExcelController(object):
 					interface = table.cell_value(i, 4).strip()
 					protocol = table.cell_value(i, 5)
 					method = table.cell_value(i, 6)
-					data = table.cell_value(i, 7)
+					data = self.compile(table.cell_value(i, 7))
 					expectedResult = table.cell_value(i, 8)
 					assertion = table.cell_value(i, 9).strip()
+
+					if method == 'get':
+						request_data = data.split(',')
+						interface = interface.format(*request_data)
 
 					yield {'caseId': caseId,
 					       'caseName': caseName,
@@ -45,6 +52,17 @@ class ExcelController(object):
 
 	def writeExcel(self):
 		pass
+
+	def compile(self, data):
+		pattern = '#(.*?)#'
+		res = re.findall(pattern, data)
+		try:
+			for r in res:
+				data = data.replace(f'#{r}#', self.global_variables[r])
+		except Exception as err:
+			logger.logger.error(err)
+
+		return data
 
 	def __del__(self):
 		pass
