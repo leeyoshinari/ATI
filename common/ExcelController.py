@@ -36,7 +36,7 @@ class ExcelController(object):
 					expectedResult = table.cell_value(i, 8)
 					assertion = table.cell_value(i, 9).strip()
 
-					if method == 'get':
+					if method == 'get' and data:
 						request_data = data.split(',')
 						interface = interface.format(*request_data)
 

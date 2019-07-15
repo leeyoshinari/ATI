@@ -14,6 +14,7 @@ SLEEP = 60
 # ip地址和端口
 IP = '127.0.0.1'
 PORT = '8888'
+# 请求头
 HEADERS = {}
 
 # 测试用例路径
@@ -51,7 +52,7 @@ RECEIVER_NAME = 'baidu_all'
 BG_COLOR = ['FFFFFF', 'E8E8E8']
 # 表格模板
 HEADER = '接口自动化测试报告'
-HTML = '<html><meta charset="gbk"><body>{}</body></html>'
+HTML = '<html><meta charset="utf-8"><body>{}</body></html>'
 TITLE = '<h2 align="center">{}</h2>'
 TEST_TIME = '<p align="right">测试时间：{}</p>'
 H3 = '<h3>{}</h3>'
