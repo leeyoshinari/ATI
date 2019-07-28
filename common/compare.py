@@ -41,7 +41,7 @@ class compare(object):
 
 			else:
 				self.flag = 0
-				self.reason = '{} is not exist in response value'.format(key)
+				self.reason = f'{key} is not exist in response value'
 
 			if self.flag == 0:
 				break
@@ -77,4 +77,4 @@ class compare(object):
 			self.reason = ''
 		else:
 			self.flag = 0
-			self.reason = 'Value of "{}" is incorrect'.format(key)
+			self.reason = f'Value of "{key}" is incorrect'

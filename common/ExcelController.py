@@ -37,7 +37,7 @@ class ExcelController(object):
 					caseId = table.cell_value(i, 0).strip()     # 用例ID
 
 					if not int(table.cell_value(i, 2)):
-						logger.logger.info('用例Id {} 不执行，已跳过'.format(caseId))
+						logger.logger.info(f'用例Id {caseId} 不执行，已跳过')
 						continue
 
 					caseName = table.cell_value(i, 1).strip()
@@ -66,7 +66,7 @@ class ExcelController(object):
 						'data': data,
 						'key': key,
 						'name': name,
-						'timeout': float(timeout) if timeout else self.timeout,
+						'timeout': float(timeout) if timeout else self.timeout,     # 如果为空或0，则接口响应超时时间默认为配置文件中的值
 						'expectedResult': expectedResult,
 						'assertion': assertion}     # 返回接口相关的所有数据
 
