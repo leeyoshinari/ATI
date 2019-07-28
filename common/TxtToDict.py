@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: leeyoshinari
+"""
+将txt文档中的全局变量转换成字典
+"""
 
 import config as cfg
 

@@ -6,22 +6,35 @@ import re
 import xlrd
 import config as cfg
 from common.TxtToDict import txt_dict
+from common.DatabaseController import Database
 from common.logger import logger
 
 
 class ExcelController(object):
 	def __init__(self):
 		self.path = cfg.TESTCASE_PATH
-		self.global_variables = txt_dict()
+		self.timeout = cfg.TIMEOUT
+		self._global_variable = txt_dict()  # 初始化全局变量
+
+		if cfg.IS_DATABASE:     # 如果需要从数据库中初始化变量
+			self._global_variable.update(Database().varibles)
+
+	@property
+	def global_variable(self):
+		return self._global_variable
+
+	@global_variable.setter
+	def global_variable(self, value):
+		self._global_variable.update(value)     # 更新全局变量
 
 	def readExcel(self):
-		excel = xlrd.open_workbook(self.path)
-		sheets = excel.sheet_names()
+		excel = xlrd.open_workbook(self.path)   # 打开excel表格
+		sheets = excel.sheet_names()        # 获取excel中所有的sheet
 		for sheet in sheets:
-			table = excel.sheet_by_name(sheet)
-			for i in range(1, table.nrows):
-				if table.cell_value(i, 0):
-					caseId = table.cell_value(i, 0).strip()
+			table = excel.sheet_by_name(sheet)      # 获取sheet中的单元格
+			for i in range(1, table.nrows):     # 遍历所有非空单元格
+				if table.cell_value(i, 0):      # 用例ID非空
+					caseId = table.cell_value(i, 0).strip()     # 用例ID
 
 					if not int(table.cell_value(i, 2)):
 						logger.logger.info('用例Id {} 不执行，已跳过'.format(caseId))
@@ -33,32 +46,42 @@ class ExcelController(object):
 					protocol = table.cell_value(i, 5)
 					method = table.cell_value(i, 6)
 					data = self.compile(table.cell_value(i, 7))
-					expectedResult = table.cell_value(i, 8)
-					assertion = table.cell_value(i, 9).strip()
+					key = table.cell_value(i, 8)
+					name = table.cell_value(i, 9)
+					timeout = table.cell_value(i, 10)
+					expectedResult = table.cell_value(i, 11)
+					assertion = table.cell_value(i, 12).strip()
 
-					if method == 'get' and data:
+					if method == 'get' and data:    # 如果是get请求，且有请求参数
 						request_data = data.split(',')
-						interface = interface.format(*request_data)
+						interface = interface.format(*request_data)     # 直接将请求参数放到接口中
 
-					yield {'caseId': caseId,
-					       'caseName': caseName,
-					       'priority': priority,
-					       'interface': interface,
-					       'protocol': protocol,
-					       'method': method,
-					       'data': data,
-					       'expectedResult': expectedResult,
-					       'assertion': assertion}
+					yield {
+						'caseId': caseId,
+						'caseName': caseName,
+						'priority': priority,
+						'interface': interface,
+						'protocol': protocol,
+						'method': method,
+						'data': data,
+						'key': key,
+						'name': name,
+						'timeout': float(timeout) if timeout else self.timeout,
+						'expectedResult': expectedResult,
+						'assertion': assertion}     # 返回接口相关的所有数据
 
 	def writeExcel(self):
+		"""
+			将测试结果存在excel中
+		"""
 		pass
 
 	def compile(self, data):
-		pattern = '#(.*?)#'
-		res = re.findall(pattern, data)
+		pattern = '<(.*?)>'     # 如果请求参数中有变量，则需要加<>，以表明是变量
+		res = re.findall(pattern, data)     # 找出所有的变量
 		try:
 			for r in res:
-				data = data.replace(f'#{r}#', self.global_variables[r])
+				data = data.replace(f'<{r}>', self._global_variable[r])     # 将变量替换成真实值
 		except Exception as err:
 			logger.logger.error(err)
 

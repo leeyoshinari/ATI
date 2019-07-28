@@ -1,3 +1,2 @@
-id 20
 username root
 password 1234567

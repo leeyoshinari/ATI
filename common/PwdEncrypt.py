@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: leeyoshinari
+"""
+加密登陆邮箱的密码
+可根据需求更改，并转换成pyc文件，但即使这样也容易反编译，从而知道密码
+"""
 
 import base64
 import smtplib

@@ -26,9 +26,11 @@ class logger(object):
 	formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(filename)s[line:%(lineno)d] - %(message)s')
 	logger.setLevel(level=log_level.get(LEVEL))
 
+	# 日志输出到文件，仅保存最近10个日志文件
 	file_handler = logging.handlers.TimedRotatingFileHandler(os.path.join(log_path, 'ATI.log'), when='midnight', interval=1, backupCount=10)
 	file_handler.suffix = '%Y-%m-%d.log'
 
+	# 日志输出到控制台
 	# file_handler = logging.StreamHandler()
 
 	file_handler.setFormatter(formatter)
