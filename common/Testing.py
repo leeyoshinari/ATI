@@ -26,44 +26,43 @@ class Testing(object):
 	def run(self):
 		logger.logger.info('开始测试')
 		try:
-			for ele in self.excel.readExcel():
-				response = ''
-				responseTime = 0
-				result = 'Failure'
-				reason = ''
-				flag = 0
+			for ele in self.excel.readExcel():      # 遍历所有用例
+				response = ''       # 响应值
+				responseTime = 0    # 响应时间
+				result = 'Failure'  # 测试结果，Success or Failure or Unknown
+				reason = ''         # 失败原因
+				flag = 0            # 测试结果标识
 				try:
 					res = self.request.request(method=ele['method'], protocol=ele['protocol'], interface=ele['interface'], data=ele['data'], timeout=ele['timeout'])
-					if res.status_code == 200:
+					if res.status_code == 200:      # 如果响应状态码为200
 						response = json.loads(res.content.decode())
 						responseTime = int(res.elapsed.microseconds / 1000)
 
-						if ele['key'] and ele['name']:
-							self.excel.global_variable = {ele['name']: response[ele['key']]}
+						if ele['key'] and ele['name']:      # 如果需要从接口响应值中获取结果保存到变量中
+							self.excel.global_variable = {ele['name']: response[ele['key']]}    # 更新全局变量
 
-						if ele['assertion']:
-							if ele['assertion'] in str(response):
+						if ele['assertion']:        # 如果响应断言不为空
+							if ele['assertion'] in str(response):       # 如果断言成功
 								result = 'Success'
 								reason = ''
 								flag = 1
 
-							if flag == 0:
-								reason = 'Assertion failure message:text expected to contain {}'.format(ele['assertion'])
+							if flag == 0:   # 断言失败
+								reason = f"Assertion failure: text expected to contain {ele['assertion']}"
 
-						elif ele['expectedResult']:
-							flag, reason = compare().compare(json.loads(ele['expectedResult']), response)
+						elif ele['expectedResult']:     # 如果响应断言为空，期望结果不为空
+							flag, reason = compare().compare(json.loads(ele['expectedResult']), response)   # 逐层逐个比较响应结果
 							if flag == 0:
 								result = 'Failure'
 							elif flag == 1:
 								result = 'Success'
 								reason = ''
 
-						else:
+						else:       # 如果响应断言为空，且期望结果为空
 							result = 'Unknown'
 							reason = 'Warning: Not verify the result'
 
-					else:
-						logger.logger.error(f'Response status code is {res.status_code}')
+					else:       # 如果响应状态码不为200
 						reason = f'Response status code is {res.status_code}'
 						result = 'Failure'
 
@@ -71,6 +70,7 @@ class Testing(object):
 					reason = err
 					logger.logger.error(traceback.format_exc())
 
+				# 组装测试结果
 				case_result = {
 					'caseId': ele['caseId'],
 					'interface': ele['interface'],
@@ -81,17 +81,18 @@ class Testing(object):
 					'result': result,
 					'reason': reason}
 
-				self.html.all_case = case_result
+				self.html.all_case = case_result    # 将测试结果组装成html
 
-				if self.is_to_excel:
+				if self.is_to_excel:    # 将测试结果写到excel
 					self.excel.writeExcel()
 
-			fail_html, html_name = self.html.writeHtml()
+			fail_html, html_name = self.html.writeHtml()    # 生成测试报告
 
-			if self.is_email:
+			if self.is_email:   # 发送邮件
 				mail_group = '{}.txt'.format(cfg.RECEIVER_NAME)
 				with open(mail_group, 'r') as f:
 					receiver = f.readline().strip()
+				# 组装邮件体
 				msg = {
 					'subject': html_name,
 					'smtp_server': cfg.SMTP_SERVER,
@@ -102,7 +103,7 @@ class Testing(object):
 					'receiver_email': receiver,
 					'fail_test': fail_html,
 					'all_test': os.path.join(cfg.RESULT_PATH, html_name + '.html')}
-				sendMsg(msg)
+				sendMsg(msg)    # 发送邮件
 
 			logger.logger.info('测试完成')
 
