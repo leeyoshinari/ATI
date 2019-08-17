@@ -14,9 +14,8 @@ The implementation of Automated Testing of Interfaces.
    
 4. Design test cases. Modify `globalVariables.txt` and `testCase.xlsx`.<br>
    (1) In `globalVariables.txt`, it stores global variables, the format is `variable_name variable_value`, splited by `space`.<br>
-   (2) In `testCase.xlsx`, parameters need to be parameterized, variables must be identified with `#`, for example: `#variable_name#`.<br>
-   (3) In `testCase.xlsx`, the column of `I` and `J`, if only judge whether response value contains a text, please set column of `J`, if judge whether full response value is right, please set column of `I`, default use column of `J`.
-
+   (2) In `testCase.xlsx`, parameters need to be parameterized, variables must be identified with `<>`, for example: `<variable_name>`.<br>
+   
 5. Run
    ```shell
    python3 main.py
@@ -25,6 +24,8 @@ The implementation of Automated Testing of Interfaces.
    ```shell
    nohup python3 main.py &
    ```
+
+6. For more information, please [readme](https://blog.csdn.net/leeyoshinari/article/details/97612522).
 
 ## Requirements
 1. requests
