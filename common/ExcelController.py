@@ -17,7 +17,7 @@ class ExcelController(object):
 		self._global_variable = txt_dict()  # 初始化全局变量
 
 		if cfg.IS_DATABASE:     # 如果需要从数据库中初始化变量
-			self._global_variable.update(Database().varibles)
+			self._global_variable.update(Database().variables)
 
 	@property
 	def global_variable(self):
@@ -52,7 +52,7 @@ class ExcelController(object):
 					expectedResult = table.cell_value(i, 11)
 					assertion = table.cell_value(i, 12).strip()
 
-					if method == 'get' and data:    # 如果是get请求，且有请求参数
+					if '{}' in interface and data:    # 如果是url接口需要传参，且有请求参数
 						request_data = data.split(',')
 						interface = interface.format(*request_data)     # 直接将请求参数放到接口中
 
@@ -81,7 +81,7 @@ class ExcelController(object):
 		res = re.findall(pattern, data)     # 找出所有的变量
 		try:
 			for r in res:
-				data = data.replace(f'<{r}>', self._global_variable[r])     # 将变量替换成真实值
+				data = data.replace(f'<{r}>', str(self._global_variable[r]))     # 将变量替换成真实值
 		except Exception as err:
 			logger.logger.error(err)
 
