@@ -114,4 +114,4 @@ class ExcelController(object):
 		return data
 
 	def __del__(self):
-		self.newbook.save()
+		pass
