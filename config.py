@@ -51,7 +51,9 @@ MYSQL_PASSWORD = '123456'
 MYSQL_DATABASE = 'ATI'
 
 # 是否将测试结果保存到excel
-IS_TO_EXCEL = False
+IS_TO_EXCEL = True
+# Excel测试结果保存路径
+EXCEL_RESULT_PATH = os.path.join(os.path.dirname(__file__), 'result')
 
 # 测试完成后是否自动发送邮件
 IS_EMAIL = True

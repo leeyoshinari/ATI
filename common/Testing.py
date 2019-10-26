@@ -17,6 +17,7 @@ from common.logger import logger
 class Testing(object):
 	def __init__(self):
 		self.is_to_excel = cfg.IS_TO_EXCEL
+		self.save_excel_path = cfg.EXCEL_RESULT_PATH
 		self.is_email = cfg.IS_EMAIL
 
 		self.request = Request()
@@ -33,7 +34,10 @@ class Testing(object):
 				reason = ''         # 失败原因
 				flag = 0            # 测试结果标识
 				try:
-					res = self.request.request(method=ele['method'], protocol=ele['protocol'], interface=ele['interface'], data=ele['data'], timeout=ele['timeout'])
+					res = self.request.request(
+						method=ele['method'], protocol=ele['protocol'], interface=ele['interface'],
+						data=ele['data'], timeout=ele['timeout'], files=ele['files'])
+
 					if res.status_code == 200:      # 如果响应状态码为200
 						response = json.loads(res.content.decode())
 						responseTime = int(res.elapsed.microseconds / 1000)
@@ -84,9 +88,16 @@ class Testing(object):
 				self.html.all_case = case_result    # 将测试结果组装成html
 
 				if self.is_to_excel:    # 将测试结果写到excel
-					self.excel.writeExcel()
+					self.excel.writeExcel({
+						'sheet': ele['sheet'],
+						'nrow': ele['nrow'],
+						'result': result,
+						'reason': reason})
 
 			fail_html, html_name = self.html.writeHtml()    # 生成测试报告
+
+			if self.is_to_excel:
+				self.excel.saveExcel(os.path.join(self.save_excel_path, self.html.name + '.xls'))      # 保存excel
 
 			if self.is_email:   # 发送邮件
 				mail_group = '{}.txt'.format(cfg.RECEIVER_NAME)

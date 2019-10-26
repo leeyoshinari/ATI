@@ -18,13 +18,13 @@ class Request(object):
 		res = requests.get(url=url, timeout=timeout)
 		return res
 
-	def post(self, protocol, interface, data, headers, timeout):
+	def post(self, protocol, interface, data, headers, timeout, files):
 		"""post请求"""
 		url = '{}://{}:{}{}'.format(protocol, self.ip, self.port, interface)
-		res = requests.post(url=url, data=data, headers=headers, timeout=timeout)
+		res = requests.post(url=url, data=data, headers=headers, files=files, timeout=timeout)
 		return res
 
-	def request(self, method, protocol, interface, data, headers=None, timeout=None):
+	def request(self, method, protocol, interface, data, headers=None, timeout=None, files=None):
 		"""请求入口，目前仅支持get和post请求，其他请求可自行添加"""
 		if timeout is None:
 			timeout = cfg.TIMEOUT
@@ -36,7 +36,7 @@ class Request(object):
 			if method == 'get':
 				res = self.get(protocol, interface, timeout)
 			elif method == 'post':
-				res = self.post(protocol, interface, data, headers, timeout)
+				res = self.post(protocol, interface, data, headers, timeout, files)
 			else:
 				logger.logger.error('暂不支持其他请求方式')
 				raise Exception('暂不支持其他请求方式')
