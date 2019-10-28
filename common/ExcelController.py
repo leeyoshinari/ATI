@@ -3,10 +3,11 @@
 # Author: leeyoshinari
 
 import re
+import json
 import xlrd
 import config as cfg
 from common.TxtToDict import txt_dict
-from common.DatabaseController import Database
+from common.InitDataController import Database
 from common.logger import logger
 
 if cfg.IS_TO_EXCEL:    # 将测试结果写到excel
@@ -53,15 +54,17 @@ class ExcelController(object):
 					interface = table.cell_value(i, 4).strip()
 					protocol = table.cell_value(i, 5)
 					method = table.cell_value(i, 6)
-					data = self.compile(table.cell_value(i, 7))
-					key = table.cell_value(i, 8)
-					name = table.cell_value(i, 9)
+					key = table.cell_value(i, 8).strip().split(',')
+					name = table.cell_value(i, 9).strip()
 					timeout = table.cell_value(i, 10)
 					expectedResult = table.cell_value(i, 11)
 					assertion = table.cell_value(i, 12).strip()
-					is_upload = int(table.cell_value(i, 13))
-					upload_file_path = table.cell_value(i, 14).strip()
-					upload_file_type = table.cell_value(i, 15).strip()
+					self.update_variables(table.cell_value(i, 13).strip(), caseId)
+					is_upload = int(table.cell_value(i, 14))
+					upload_file_path = table.cell_value(i, 15).strip()
+					upload_file_type = table.cell_value(i, 16).strip()
+
+					data = self.compile(table.cell_value(i, 7))
 
 					if is_upload:
 						file_name = f"test.{upload_file_path.split('.')[-1]}"
@@ -95,8 +98,11 @@ class ExcelController(object):
 			将测试结果存在excel中
 		"""
 		sheet = self.newbook.get_sheet(result['sheet'])
-		sheet.write(result['nrow'], 16, result['result'])
-		sheet.write(result['nrow'], 17, result['result'])
+		try:
+			sheet.write(result['nrow'], 17, result['result'])
+			sheet.write(result['nrow'], 18, result['reason'])
+		except Exception as err:
+			logger.logger.error(f"用例：{result['caseId']} 写Excel失败，Error： {err}")
 
 	def saveExcel(self, filepath):
 		self.newbook.save(filepath)
@@ -112,6 +118,33 @@ class ExcelController(object):
 			logger.logger.error(err)
 
 		return data
+
+	def update_variables(self, input_variable, caseId):
+		"""
+			更新全局变量
+			可以对全局变量中已有字段的值进行更改，包括：相加（add）、相减（sub）、重新赋值，
+			也可以将新字段和值添加到全局变量中
+		"""
+		if input_variable:
+			try:
+				input_dict = json.loads(input_variable)
+
+				for key, value in input_dict.items():
+					if key in self._global_variable:
+						if value.get('type') == 'add':
+							self._global_variable.update({key: int(self._global_variable[key]) + value['value']})
+
+						elif value.get('type') == 'sub':
+							self._global_variable.update({key: int(self._global_variable[key]) - value['value']})
+
+						else:
+							self._global_variable.update({key: value['value']})
+
+					else:
+						self._global_variable.update({key: value['value']})
+
+			except Exception as err:
+				logger.logger.error(f"用例 {caseId} 更新变量值失败，Error：{err}")
 
 	def __del__(self):
 		pass

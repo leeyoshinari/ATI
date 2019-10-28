@@ -7,7 +7,7 @@ import config as cfg
 
 class Database(object):
 	def __init__(self):
-		self.variable_name = ['name', 'password']       # 将数据库查询的值赋给指定变量名
+		self.variable_name = ['name', 'password', 'id']       # 将数据库查询的值赋给指定变量名
 		self.variables = {}      # 存储变量
 		if cfg.DATABASE_NAME == 'MYSQL':
 			self.read_data_from_mysql()
@@ -30,6 +30,9 @@ class Database(object):
 
 		cursor.close()
 		db.close()
+
+		# 其他变量的赋值可在此进行
+		self.variables.update({self.variable_name[2]: 3})
 
 	def read_data_from_oracle(self):
 		"""

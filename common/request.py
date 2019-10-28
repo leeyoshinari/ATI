@@ -36,7 +36,7 @@ class Request(object):
 			if method == 'get':
 				res = self.get(protocol, interface, timeout)
 			elif method == 'post':
-				res = self.post(protocol, interface, data, headers, timeout, files)
+				res = self.post(protocol, interface, data.encode(), headers, timeout, files)
 			else:
 				logger.logger.error('暂不支持其他请求方式')
 				raise Exception('暂不支持其他请求方式')

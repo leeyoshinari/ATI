@@ -42,8 +42,8 @@ class Testing(object):
 						response = json.loads(res.content.decode())
 						responseTime = int(res.elapsed.microseconds / 1000)
 
-						if ele['key'] and ele['name']:      # 如果需要从接口响应值中获取结果保存到变量中
-							self.excel.global_variable = {ele['name']: response[ele['key']]}    # 更新全局变量
+						if ele['name']:      # 如果需要从接口响应值中获取结果保存到变量中
+							self.excel.global_variable = {ele['name']: self.parse_response(response, ele['key'])}  # 更新全局变量
 
 						if ele['assertion']:        # 如果响应断言不为空
 							if ele['assertion'] in str(response):       # 如果断言成功
@@ -89,6 +89,7 @@ class Testing(object):
 
 				if self.is_to_excel:    # 将测试结果写到excel
 					self.excel.writeExcel({
+						'caseId': ele['caseId'],
 						'sheet': ele['sheet'],
 						'nrow': ele['nrow'],
 						'result': result,
@@ -97,7 +98,7 @@ class Testing(object):
 			fail_html, html_name = self.html.writeHtml()    # 生成测试报告
 
 			if self.is_to_excel:
-				self.excel.saveExcel(os.path.join(self.save_excel_path, self.html.name + '.xls'))      # 保存excel
+				self.excel.saveExcel(os.path.join(self.save_excel_path, html_name + '.xls'))      # 保存excel
 
 			if self.is_email:   # 发送邮件
 				mail_group = '{}.txt'.format(cfg.RECEIVER_NAME)
@@ -120,6 +121,32 @@ class Testing(object):
 
 		except Exception as err:
 			logger.logger.error(traceback.format_exc())
+
+	@staticmethod
+	def parse_response(response, keys):
+		"""
+			从接口响应值中获取值
+			根据keys的顺序，依次获取指定字段的值
+		"""
+		def get_value(input_dict, k):
+			result = None
+			if isinstance(input_dict, dict):
+				result = input_dict.get(k)
+
+			if isinstance(input_dict, list):
+				result = input_dict[int(k)]
+
+			return result
+
+		try:
+			res = None
+			for key in keys:
+				res = get_value(response, key)
+
+			return res
+		except Exception as err:
+			logger.logger.error(err)
+			raise Exception('ERROR: Get value from response!')
 
 	def __del__(self):
 		del self.html
