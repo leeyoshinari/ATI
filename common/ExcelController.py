@@ -18,6 +18,7 @@ class ExcelController(object):
 	def __init__(self):
 		self.path = cfg.TESTCASE_PATH
 		self.timeout = cfg.TIMEOUT
+		self.headers = cfg.HEADERS      # 默认请求头
 		self._global_variable = txt_dict()  # 初始化全局变量
 
 		if cfg.IS_DATABASE:     # 如果需要从数据库中初始化变量
@@ -63,6 +64,7 @@ class ExcelController(object):
 					is_upload = int(table.cell_value(i, 14))
 					upload_file_path = table.cell_value(i, 15).strip()
 					upload_file_type = table.cell_value(i, 16).strip()
+					header = table.cell_value(i, 17)
 
 					data = self.compile(table.cell_value(i, 7))
 
@@ -75,6 +77,7 @@ class ExcelController(object):
 					if '{}' in interface and data:    # 如果是url接口需要传参，且有请求参数
 						request_data = data.split(',')
 						interface = interface.format(*request_data)     # 直接将请求参数放到接口中
+						data = None
 
 					yield {
 						'sheet': sheet,
@@ -91,6 +94,7 @@ class ExcelController(object):
 						'timeout': float(timeout) if timeout else self.timeout,     # 如果为空或0，则接口响应超时时间默认为配置文件中的值
 						'expectedResult': expectedResult,
 						'assertion': assertion,
+						'header': json.loads(header) if header else self.headers,
 						'files': files}     # 返回接口相关的所有数据
 
 	def writeExcel(self, result):
@@ -99,8 +103,8 @@ class ExcelController(object):
 		"""
 		sheet = self.newbook.get_sheet(result['sheet'])
 		try:
-			sheet.write(result['nrow'], 17, result['result'])
-			sheet.write(result['nrow'], 18, result['reason'])
+			sheet.write(result['nrow'], 18, result['result'])
+			sheet.write(result['nrow'], 19, result['reason'])
 		except Exception as err:
 			logger.logger.error(f"用例：{result['caseId']} 写Excel失败，Error： {err}")
 

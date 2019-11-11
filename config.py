@@ -17,7 +17,7 @@ SLEEP = 60
 IP = '127.0.0.1'
 PORT = '8888'
 # 请求头
-HEADERS = {}
+HEADERS = {"Accept": "text/plain", "Content-Type": "application/json; charset=UTF-8"}
 
 # 定时任务设置
 # 0为只执行一次，1为每隔INTERVAL(单位s)执行一次，2为每天TIMER_SET执行一次

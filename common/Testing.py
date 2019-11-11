@@ -29,18 +29,18 @@ class Testing(object):
 		try:
 			for ele in self.excel.readExcel():      # 遍历所有用例
 				response = ''       # 响应值
-				responseTime = 0    # 响应时间
+				response_time = 0    # 响应时间
 				result = 'Failure'  # 测试结果，Success or Failure or Unknown
 				reason = ''         # 失败原因
 				flag = 0            # 测试结果标识
 				try:
 					res = self.request.request(
 						method=ele['method'], protocol=ele['protocol'], interface=ele['interface'],
-						data=ele['data'], timeout=ele['timeout'], files=ele['files'])
+						data=ele['data'], headers=ele['header'], timeout=ele['timeout'], files=ele['files'])
 
 					if res.status_code == 200:      # 如果响应状态码为200
 						response = json.loads(res.content.decode())
-						responseTime = int(res.elapsed.microseconds / 1000)
+						response_time = int(res.elapsed.microseconds / 1000)
 
 						if ele['name']:      # 如果需要从接口响应值中获取结果保存到变量中
 							self.excel.global_variable = {ele['name']: self.parse_response(response, ele['key'])}  # 更新全局变量
@@ -81,7 +81,7 @@ class Testing(object):
 					'method': ele['method'],
 					'param': ele['data'] if ele['method'] == 'post' else '',
 					'response': response if result != 'Success' else '',
-					'responseTime': responseTime,
+					'responseTime': response_time,
 					'result': result,
 					'reason': reason}
 

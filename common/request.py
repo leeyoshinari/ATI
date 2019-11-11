@@ -24,19 +24,13 @@ class Request(object):
 		res = requests.post(url=url, data=data, headers=headers, files=files, timeout=timeout)
 		return res
 
-	def request(self, method, protocol, interface, data, headers=None, timeout=None, files=None):
+	def request(self, method, protocol, interface, data, headers, timeout, files=None):
 		"""请求入口，目前仅支持get和post请求，其他请求可自行添加"""
-		if timeout is None:
-			timeout = cfg.TIMEOUT
-
-		if headers is None:
-			headers = cfg.HEADERS       # 需要请求头
-
 		try:
 			if method == 'get':
 				res = self.get(protocol, interface, timeout)
 			elif method == 'post':
-				res = self.post(protocol, interface, data.encode(), headers, timeout, files)
+				res = self.post(protocol, interface, data, headers, timeout, files)
 			else:
 				logger.logger.error('暂不支持其他请求方式')
 				raise Exception('暂不支持其他请求方式')
