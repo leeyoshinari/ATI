@@ -14,6 +14,9 @@ class Database(object):
 		if cfg.DATABASE_NAME == 'ORACLE':
 			self.read_data_from_oracle()
 
+		# 其他变量的赋值可在此进行
+		self.variables.update({self.variable_name[2]: 3})
+
 	def read_data_from_mysql(self):
 		"""
 			从MySQL数据库中读取数据
@@ -31,15 +34,17 @@ class Database(object):
 		cursor.close()
 		db.close()
 
-		# 其他变量的赋值可在此进行
-		self.variables.update({self.variable_name[2]: 3})
-
 	def read_data_from_oracle(self):
 		"""
 			从Oracle数据库中读取数据
 		"""
-		# import cx_Oracle
-		pass
+		import cx_Oracle
+		db = cx_Oracle.connect(cfg.ORACLE_USERNAME, cfg.ORACLE_PASSWORD, cfg.ORACLE_HOST)
+		cursor = db.cursor()
+		sql = 'select name, pwd from user;'     # sql语句
+		cursor.execute(sql)
+		res = cursor.fetchall()
+		self.variables.update({self.variable_name[0]: res[0][0]})
 
 	def __del__(self):
 		pass

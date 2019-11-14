@@ -42,13 +42,17 @@ LOG_PATH = os.path.join(os.path.dirname(__file__), 'result')
 # 数据库相关配置
 # 是否需要从数据库中获取变量，参数化接口传参
 IS_DATABASE = False
-# 配置使用数据库名称，MYSQL、OCACLE
+# 配置使用数据库名称，MYSQL、ORACLE
 DATABASE_NAME = 'MYSQL'
 # MySQL数据库配置
 MYSQL_IP = '127.0.0.1'
 MYSQL_USERNAME = 'root'
 MYSQL_PASSWORD = '123456'
 MYSQL_DATABASE = 'ATI'
+# ORACLE数据库配置
+ORACLE_HOST = '127.0.0.1:1521/orcl'
+ORACLE_USERNAME = 'root'
+ORACLE_PASSWORD = '123456'
 
 # 是否将测试结果保存到excel
 IS_TO_EXCEL = True
