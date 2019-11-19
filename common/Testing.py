@@ -27,6 +27,7 @@ class Testing(object):
 		logger.logger.info('开始测试')
 		try:
 			for ele in self.excel.readExcel():      # 遍历所有用例
+				logger.logger.info(f"正在执行用例{ele['caseId']}-->{ele['caseName']}-->{ele['interface']}")
 				response = ''       # 响应值
 				response_time = 0    # 响应时间
 				result = 'Failure'  # 测试结果，Success or Failure or Unknown
