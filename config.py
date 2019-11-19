@@ -17,7 +17,9 @@ SLEEP = 60
 IP = '127.0.0.1'
 PORT = '8888'
 # 请求头
-HEADERS = {"Accept": "text/plain", "Content-Type": "application/json; charset=UTF-8"}
+HEADERS = {"Accept": "application/json, text/plain, */*",
+           "Accept-Encoding": "gzip, deflate",
+           "Content-Type": "application/json; charset=UTF-8"}
 
 # 定时任务设置
 # 0为只执行一次，1为每隔INTERVAL(单位s)执行一次，2为每天TIMER_SET执行一次
@@ -85,8 +87,8 @@ H3 = '<h3>{}</h3>'
 SPAN = '<span style="font-size:14px; font-weight:normal">&nbsp;&nbsp;&nbsp;&nbsp;所有用例测试结果见邮件附件</span>'
 OVERVIEW1 = '<p>&nbsp;&nbsp;&nbsp;&nbsp;用例总数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用例执行总耗时：<font color="blue">{:.2f}</font> s</p>'
 OVERVIEW2 = '<p>&nbsp;&nbsp;&nbsp;&nbsp;用例执行成功数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用例执行失败数：<font color="red">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;成功率：<font color="red">{:.2f}%</font></p>'
-TABLE = '<table width="100%" border="1" cellspacing="0" cellpadding="6" align="center">{}</table>'
-TABLE_HEAD = '<tr bgcolor="#99CCFF" align="center"><th width="7%">用例ID</th><th width="12%">请求接口</th><th width="7%">请求方式</th><th width="20%">请求参数</th><th width="20%">响应值</th><th width="7%">响应时间</th><th width="7%">测试结果</th><th width="20%">失败原因</th></tr>'
+TABLE = '<table width="100%" border="1" cellspacing="0" cellpadding="6" align="center" style="table-layout:fixed; word-wrap:break-word;>{}</table>'
+TABLE_HEAD = '<tr bgcolor="#99CCFF" align="center"><th width="10%">用例ID</th><th width="15%">请求接口</th><th width="5%">请求方式</th><th width="20%">请求参数</th><th width="20%">响应值</th><th width="5%">响应时间</th><th width="5%">测试结果</th><th width="20%">失败原因</th></tr>'
 TR = '<tr bgcolor="#{}">{}</tr>'
 TD = '<td>{}</td>'
 TD_FAIL = '<td><font color="red">Failure</font></td>'

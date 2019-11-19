@@ -88,7 +88,7 @@ class ExcelController(object):
 						'interface': interface,
 						'protocol': protocol,
 						'method': method,
-						'data': data,
+						'data': data.encode() if data else None,
 						'key': key,
 						'name': name,
 						'timeout': float(timeout) if timeout else self.timeout,     # 如果为空或0，则接口响应超时时间默认为配置文件中的值
@@ -117,7 +117,12 @@ class ExcelController(object):
 		res = re.findall(pattern, data)     # 找出所有的变量
 		try:
 			for r in res:
-				data = data.replace(f'<{r}>', str(self._global_variable[r]))     # 将变量替换成真实值
+				if isinstance(self._global_variable[r], list) or isinstance(self._global_variable[r], dict):
+					newstr = json.dumps(self._global_variable[r])
+				else:
+					newstr = str(self._global_variable[r])
+
+				data = data.replace(f'<{r}>', newstr)     # 将变量替换成真实值
 		except Exception as err:
 			logger.logger.error(err)
 

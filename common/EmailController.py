@@ -29,12 +29,18 @@ def sendMsg(msg):
 	all_test['Content-Disposition'] = 'attachment; filename="All Cases Result.html"'    # 邮件附件的名字
 	message.attach(all_test)        # 添加邮件附件
 
+	test_case = MIMEText(open(msg['test_case'], 'rb').read(), 'base64', 'utf-8')
+	test_case['Content-Type'] = 'application/octet-stream'
+	test_case['Content-Disposition'] = 'attachment; filename="testCase.xls"'  # 邮件附件的名字
+	message.attach(test_case)  # 添加邮件附件
+
 	try:
 		# server = smtplib.SMTP_SSL(msg['smtp_server'], 465)
 		# server.login(msg['sender'], msg['password'])      # 登陆邮箱
 		server = emailServer(msg['smtp_server'], 465, msg['sender_email'], msg['password'])
 		server.sendmail(msg['sender_email'], msg['receiver_email'].split(','), message.as_string())     # 发送邮件
 		server.quit()
+		del message
 		logger.logger.info('邮件发送成功')
 	except Exception as err:
 		logger.logger.error(traceback.format_exc())

@@ -17,7 +17,6 @@ from common.logger import logger
 class Testing(object):
 	def __init__(self):
 		self.is_to_excel = cfg.IS_TO_EXCEL
-		self.save_excel_path = cfg.EXCEL_RESULT_PATH
 		self.is_email = cfg.IS_EMAIL
 
 		self.request = Request()
@@ -98,7 +97,7 @@ class Testing(object):
 			fail_html, html_name = self.html.writeHtml()    # 生成测试报告
 
 			if self.is_to_excel:
-				self.excel.saveExcel(os.path.join(self.save_excel_path, html_name + '.xls'))      # 保存excel
+				self.excel.saveExcel(os.path.join(cfg.EXCEL_RESULT_PATH, html_name + '.xls'))      # 保存excel
 
 			if self.is_email:   # 发送邮件
 				mail_group = '{}.txt'.format(cfg.RECEIVER_NAME)
@@ -114,7 +113,9 @@ class Testing(object):
 					'receiver_name': cfg.RECEIVER_NAME,
 					'receiver_email': receiver,
 					'fail_test': fail_html,
-					'all_test': os.path.join(cfg.RESULT_PATH, html_name + '.html')}
+					'all_test': os.path.join(cfg.RESULT_PATH, html_name + '.html'),
+					'test_case': os.path.join(cfg.EXCEL_RESULT_PATH, html_name + '.xls')
+				}
 				sendMsg(msg)    # 发送邮件
 
 			logger.logger.info('测试完成')
@@ -139,9 +140,9 @@ class Testing(object):
 			return result
 
 		try:
-			res = None
+			res = response
 			for key in keys:
-				res = get_value(response, key)
+				res = get_value(res, key)
 
 			return res
 		except Exception as err:

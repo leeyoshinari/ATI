@@ -16,16 +16,14 @@ def getPID(port):
 	"""
 	pid = None
 	try:
-		'''result = os.popen('lsof -i:{} |tr -s " "'.format(port)).readlines()[1]
-		res = result.strip().split(' ')
-		pid = int(res[1])'''
 		result = os.popen(f'netstat -nlp|grep {port} |tr -s " "').readlines()
-		res = [line.strip() for line in result if str(port) in line]
+		flag = f':{port}'
+		res = [line.strip() for line in result if flag in line]
 		logger.logger.debug(res[0])
 		p = res[0].split(' ')
 		pp = p[3].split(':')[-1]
 		if str(port) == pp:
-			pid = p[-1].split('/')[0]
+			pid = p[p.index('LISTEN') + 1].split('/')[0]
 	except IndexError as err:
 		logger.logger.info(f'Querying whether the interface is started. INFO: {err}')
 

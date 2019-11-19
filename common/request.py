@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 # Author: leeyoshinari
 
+import json
 import requests
 import config as cfg
 from common.logger import logger
@@ -21,7 +22,11 @@ class Request(object):
 	def post(self, protocol, interface, data, headers, timeout, files):
 		"""post请求"""
 		url = '{}://{}:{}{}'.format(protocol, self.ip, self.port, interface)
-		res = requests.post(url=url, data=data, headers=headers, files=files, timeout=timeout)
+		try:
+			res = requests.post(url=url, data=data, headers=headers, files=files, timeout=timeout)
+		except ValueError as err:
+			logger.logger.error(err)
+			res = requests.post(url=url, data=json.loads(data), headers=headers, files=files, timeout=timeout)
 		return res
 
 	def request(self, method, protocol, interface, data, headers, timeout, files=None):
