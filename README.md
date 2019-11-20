@@ -12,9 +12,8 @@ The implementation of Automated Testing of Interfaces.
 
 3. Modify `config.py`.
    
-4. Design test cases. Modify `globalVariables.txt` and `testCase.xlsx`.<br>
-   (1) In `globalVariables.txt`, it stores global variables, the format is `variable_name variable_value`, splited by `space`.<br>
-   (2) In `testCase.xlsx`, parameters need to be parameterized, variables must be identified with `<>`, for example: `<variable_name>`.<br>
+4. Design test cases. Modify `testCase.xlsx`.<br>
+   In `testCase.xlsx`, parameters need to be parameterized, variables must be identified with `<>`, for example: `<variable_name>`.<br>
    
 5. Run
    ```shell
@@ -29,4 +28,4 @@ The implementation of Automated Testing of Interfaces.
 
 ## Requirements
 1. requests
-2. xlrd
+2. xlutils

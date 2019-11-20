@@ -1,3 +1,0 @@
-username root
-password 1234567
-id 3

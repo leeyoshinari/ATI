@@ -12,7 +12,6 @@ from common.logger import logger
 
 
 def sendMsg(msg):
-	logger.logger.info(msg)
 	message = MIMEMultipart()
 	if msg['smtp_server'] == 'smtp.sina.com':   # 新浪邮箱的Header不能使用utf-8的编码方式
 		message['From'] = Header(msg['sender_name'])    # 发件人名字

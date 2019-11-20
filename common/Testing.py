@@ -37,6 +37,7 @@ class Testing(object):
 					res = self.request.request(
 						method=ele['method'], protocol=ele['protocol'], interface=ele['interface'],
 						data=ele['data'], headers=ele['header'], timeout=ele['timeout'], files=ele['files'])
+					logger.logger.debug(f"{ele['caseId']}-->{ele['interface']}-->{json.loads(res.content.decode())}")
 
 					if res.status_code == 200:      # 如果响应状态码为200
 						response = json.loads(res.content.decode())

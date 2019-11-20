@@ -34,16 +34,12 @@ IS_START = True
 
 # 测试用例路径
 TESTCASE_PATH = os.path.join(os.path.dirname(__file__), 'testCase', 'testCase.xlsx')
-# 全局变量路径
-GLOBAL_VARIABLES = os.path.join(os.path.dirname(__file__), 'testCase', 'globalVariables.txt')
 # 测试结果存放路径
 RESULT_PATH = os.path.join(os.path.dirname(__file__), 'result')
 # 日志路径
 LOG_PATH = os.path.join(os.path.dirname(__file__), 'result')
 
 # 数据库相关配置
-# 是否需要从数据库中获取变量，参数化接口传参
-IS_DATABASE = False
 # 配置使用数据库名称，MYSQL、ORACLE
 DATABASE_NAME = 'MYSQL'
 # MySQL数据库配置

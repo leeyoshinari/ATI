@@ -6,7 +6,6 @@ import re
 import json
 import xlrd
 import config as cfg
-from common.TxtToDict import txt_dict
 from common.InitDataController import Database
 from common.logger import logger
 
@@ -19,10 +18,7 @@ class ExcelController(object):
 		self.path = cfg.TESTCASE_PATH
 		self.timeout = cfg.TIMEOUT
 		self.headers = cfg.HEADERS      # 默认请求头
-		self._global_variable = txt_dict()  # 初始化全局变量
-
-		if cfg.IS_DATABASE:     # 如果需要从数据库中初始化变量
-			self._global_variable.update(Database().variables)
+		self._global_variable = Database().variables  # 初始化全局变量
 
 		if cfg.IS_TO_EXCEL:     # 将测试结果写到excel
 			workbook = xlrd.open_workbook(self.path)
@@ -61,7 +57,7 @@ class ExcelController(object):
 					expectedResult = table.cell_value(i, 11)
 					assertion = table.cell_value(i, 12).strip()
 					self.update_variables(table.cell_value(i, 13).strip(), caseId)
-					is_upload = int(table.cell_value(i, 14))
+					is_upload = table.cell_value(i, 14)
 					upload_file_path = table.cell_value(i, 15).strip()
 					upload_file_type = table.cell_value(i, 16).strip()
 					header = table.cell_value(i, 17)
