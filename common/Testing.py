@@ -78,6 +78,7 @@ class Testing(object):
 				# 组装测试结果
 				case_result = {
 					'caseId': ele['caseId'],
+					'caseName': ele['caseName'],
 					'interface': ele['interface'],
 					'method': ele['method'],
 					'param': ele['data'] if ele['method'] == 'post' else '',

@@ -44,6 +44,7 @@ class HtmlController(object):
 	def all_case(self, value):
 		color = int(value['caseId'].split('_')[-1]) % 2
 		caseId = self.td.format(value['caseId'])
+		casename = self.td.format(value['caseName'])
 		interface = self.td.format(value['interface'])
 		method = self.td.format(value['method'])
 		param = self.td.format(value['param'])
@@ -55,7 +56,7 @@ class HtmlController(object):
 			result = self.td_success.format(value['result'])
 		reason = self.td.format(value['reason'])
 		# 把所有结果写到一行里
-		res = self.tr.format(self.bg_color[color], '{}{}{}{}{}{}{}{}'.format(caseId, interface, method, param, response, responseTime, result, reason))
+		res = self.tr.format(self.bg_color[color], '{}{}{}{}{}{}{}{}{}'.format(caseId, casename, interface, method, param, response, responseTime, result, reason))
 
 		if value['result'] == 'Failure':    # 失败用例单独存储
 			self._fail_case.append(res)

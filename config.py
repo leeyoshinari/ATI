@@ -84,7 +84,7 @@ SPAN = '<span style="font-size:14px; font-weight:normal">&nbsp;&nbsp;&nbsp;&nbsp
 OVERVIEW1 = '<p>&nbsp;&nbsp;&nbsp;&nbsp;用例总数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用例执行总耗时：<font color="blue">{:.2f}</font> s</p>'
 OVERVIEW2 = '<p>&nbsp;&nbsp;&nbsp;&nbsp;用例执行成功数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用例执行失败数：<font color="red">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;成功率：<font color="red">{:.2f}%</font></p>'
 TABLE = '<table width="100%" border="1" cellspacing="0" cellpadding="6" align="center" style="table-layout:fixed; word-wrap:break-word;>{}</table>'
-TABLE_HEAD = '<tr bgcolor="#99CCFF" align="center"><th width="10%">用例ID</th><th width="15%">请求接口</th><th width="5%">请求方式</th><th width="20%">请求参数</th><th width="20%">响应值</th><th width="5%">响应时间</th><th width="5%">测试结果</th><th width="20%">失败原因</th></tr>'
+TABLE_HEAD = '<tr bgcolor="#99CCFF" align="center"><th width="8%">用例ID</th><th width="15%">用例名称</th><th width="15%">请求接口</th><th width="5%">请求方式</th><th width="19%">请求参数</th><th width="14%">响应值</th><th width="5%">响应时间</th><th width="5%">测试结果</th><th width="14%">失败原因</th></tr>'
 TR = '<tr bgcolor="#{}">{}</tr>'
 TD = '<td>{}</td>'
 TD_FAIL = '<td><font color="red">Failure</font></td>'
