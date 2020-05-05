@@ -24,7 +24,7 @@ def getPID(port):
 		pp = p[3].split(':')[-1]
 		if str(port) == pp:
 			pid = p[p.index('LISTEN') + 1].split('/')[0]
-	except IndexError as err:
+	except Exception as err:
 		logger.logger.info(f'Querying whether the interface is started. INFO: {err}')
 
 	return pid
@@ -57,7 +57,7 @@ def main():
 					pid = getPID(port)
 					if pid:
 						if pid != PID:      # 如果服务重启，则立即执行
-							time.sleep(5)
+							time.sleep(10)
 							PID = pid
 							run()
 							start_time = time.time()    # 重置周期性执行开始时间
@@ -70,18 +70,21 @@ def main():
 				current_hour = int(time.strftime('%H', time.localtime(time.time())))
 				if current_hour - set_hour == 0:
 					current_minute = int(time.strftime('%M', time.localtime(time.time())))
-					if current_minute - set_minute == 0 or current_minute - set_minute == 1:    # 如果满足时、分
+					if current_minute - set_minute == 0:    # 如果满足时、分
 						run()
 
 				if cfg.IS_START:
 					pid = getPID(port)
 					if pid:
 						if pid != PID:      # 如果服务重启，则立即执行
-							time.sleep(5)
+							time.sleep(10)
 							PID = pid
 							run()
 
 				time.sleep(sleep)
+
+		else:
+			run()
 
 	else:
 		run()

@@ -34,7 +34,7 @@ def sendMsg(msg):
 	message.attach(test_case)  # 添加邮件附件
 
 	try:
-		# server = smtplib.SMTP_SSL(msg['smtp_server'], 465)
+		# server = smtplib.SMTP(msg['smtp_server'], 25)
 		# server.login(msg['sender'], msg['password'])      # 登陆邮箱
 		server = emailServer(msg['smtp_server'], 465, msg['sender_email'], msg['password'])
 		server.sendmail(msg['sender_email'], msg['receiver_email'].split(','), message.as_string())     # 发送邮件
